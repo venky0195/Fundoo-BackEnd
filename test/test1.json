@@ -1,0 +1,19 @@
+{
+  "registration": {
+    "firstName": "Venky",
+    "lastName": "Ven",
+    "Email": "abcd@gmail.com",
+    "Password": "0123456789"
+  },
+  "Login": {
+    "Email": "abcd@gmail.com",
+    "Password": "0123456789"
+  },
+  "ForgotPassword": {
+    "Email": "abcd@gmail.com"
+  },
+  "ResetPassword": {
+    "Password": "12345678",
+    "headers": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjp7InVzZXJfaWQiOiI1YzgzNTQ0OWFjZDNiNTM1ODJiZWE3NjcifSwiaWF0IjoxNTUyMTEzMTMzLCJleHAiOjE1NTIxMzExMzN9.QrrFOIkYT1v9VS8zyxNgc_dzfIZRckXWaUzhvyECZFU"
+  }
+}
