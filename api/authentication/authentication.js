@@ -5,13 +5,18 @@ exports.checkToken = (req, res, next) => {
   var token1 = req.headers["token"];
 
   if (token1) {
+
     jwt.verify(token1, "secretkey", (err, decoded) => {
       if (err) {
         return res.send({
           success: false,
           message: "Token is not valid"
         });
+        console.log("NOT VALID TOKEN");
+        
       } else {
+        console.log("VALID TOKEN");
+
         req.decoded = decoded;
         next();
       }

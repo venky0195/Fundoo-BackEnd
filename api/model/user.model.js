@@ -117,6 +117,7 @@ userModel.prototype.forgotPassword = (data, callback) => {
   });
 };
 userModel.prototype.updateUserPassword = (req, callback) => {
+  console.log("inside model",req.body.password);
   let newPassword = bcrypt.hashSync(req.body.password, saltRounds);
   console.log("new pass bcrypt--", newPassword);
   user.updateOne(

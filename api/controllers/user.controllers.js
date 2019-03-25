@@ -140,19 +140,25 @@ exports.forgotPassword = (req, res) => {
  */
 exports.setPassword = (req, res) => {
   try {
+    console.log("IN CONTROLLER");
+    
     req.checkBody("password", "Invaild Password").isLength({
       min: 6
     });
     var errors = req.validationErrors();
     var response = {};
     if (errors) {
+     
+      
       response.status = false;
       response.error = errors;
       return res.status(422).send(response);
     } else {
+     
       var responseResult = {};
-      userService.resetpassword(req, (err, result) => {
+      userService.resetPassword(req, (err, result) => {
         if (err) {
+         
           responseResult.success = false;
           responseResult.message = "Reset Password Failed";
           responseResult.error = err;
