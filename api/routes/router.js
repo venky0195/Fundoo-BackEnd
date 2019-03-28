@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 // Import user controller
 const userController = require("../controllers/user.controllers");
+const noteController = require('../controllers/note.controllers')
 const middle = require("../authentication/authentication");
 
 // Contact routes
@@ -11,10 +12,11 @@ router.post("/register", userController.registration);
 router.post("/forgotPassword", userController.forgotPassword);
 router.post(
   "/resetPassword/:token",
-  middle.checkToken,
+  middle.resetToken,
   userController.setPassword
 );
-router.get("/getAllUsers", userController.getAllUsers);
+router.post('/createNote', middle.checkToken, noteController.createNote);
+router.get('/getNotes', middle.checkToken, noteController.getNotes);
 
 // Export API routes
 module.exports = router;

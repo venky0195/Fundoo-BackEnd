@@ -10,3 +10,14 @@ module.exports = {
     return obj;
   }
 };
+module.exports = {
+  GenerateTokenAuth(payload) {
+    const token = jwt.sign({ payload }, "secretkey-auth", { expiresIn: "5h" });
+    const obj = {
+      success: true,
+      message: "Token Generated Successfully!!",
+      token: token
+    };
+    return obj;
+  }
+};

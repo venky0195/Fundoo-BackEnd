@@ -31,12 +31,16 @@ exports.login = (req, res) => {
           responseResult.status = true;
           responseResult.message = "Login Successful";
           responseResult.result = result;
+          console.log("result is ",result)
           const payload = {
-            user_id: result._id
+            user_id: result._id,
+            firstName: result.firstName
+            
           };
-          const obj = token.GenerateToken(payload);
+          console.log("payload is ",payload)
+          const obj = token.GenerateTokenAuth(payload);
           responseResult.token = obj;
-          
+
           console.log("token details==> ", responseResult.token.token);
           res.status(200).send(responseResult);
         }
@@ -148,8 +152,6 @@ exports.setPassword = (req, res) => {
     var errors = req.validationErrors();
     var response = {};
     if (errors) {
-     
-      
       response.status = false;
       response.error = errors;
       return res.status(422).send(response);

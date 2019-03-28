@@ -52,7 +52,7 @@ userModel.prototype.login = (body, callback) => {
       bcrypt.compare(body.password, result.password).then(res => {
         if (res) {
           console.log("Login Successful");
-          callback(null, res);
+          callback(null, result);
         } else {
           console.log("Incorrect password");
           callback("Incorrect password");
