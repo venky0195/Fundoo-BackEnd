@@ -17,6 +17,10 @@ router.post(
 );
 router.post('/createNote', middle.checkToken, noteController.createNote);
 router.get('/getNotes', middle.checkToken, noteController.getNotes);
+router.put('/updateColor', middle.checkToken, noteController.updateColor);
+router.put('/reminder', middle.checkToken, noteController.reminder);
+
+
 
 // Export API routes
 module.exports = router;

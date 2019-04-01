@@ -1,10 +1,13 @@
 const userService = require("../services/user.services");
 const token = require("../../middleware/token");
 const sendMail = require("../../middleware/nodemailer");
-
+const express = require('express');
+const responseTime = require('response-time')
+const redis = require('redis');
 /**
- * @param {*} req
- * @param {*} res
+ * @description: Validate email and password
+ * @param {*request from front-end} req
+ * @param {*response from back-end} res
  */
 exports.login = (req, res) => {
   try {
@@ -51,8 +54,9 @@ exports.login = (req, res) => {
   }
 };
 /**
- * @param {*} req
- * @param {*} res
+ * @description: Validate all the details using express validator
+ * @param {*request from front-end} req
+ * @param {*response from back-end} res
  */
 exports.registration = (req, res) => {
   try {
@@ -98,8 +102,10 @@ exports.registration = (req, res) => {
   }
 };
 /**
- * @param {*} req
- * @param {*} res
+ * @description: Validate all the details using express validator, send an email containing link 
+ *               to reset password using node mailer
+ * @param {*request from front-end} req
+ * @param {*response from back-end} res
  */
 exports.forgotPassword = (req, res) => {
   try {
@@ -139,13 +145,14 @@ exports.forgotPassword = (req, res) => {
   }
 };
 /**
- * @param {*} req
- * @param {*} res
+ * @description: Validate all the passwords using express validator, verify the token and change the password
+ * @param {*request from front-end} req
+ * @param {*response from back-end} res
  */
 exports.setPassword = (req, res) => {
   try {
     console.log("IN CONTROLLER");
-    
+
     req.checkBody("password", "Invaild Password").isLength({
       min: 6
     });
@@ -156,11 +163,10 @@ exports.setPassword = (req, res) => {
       response.error = errors;
       return res.status(422).send(response);
     } else {
-     
+
       var responseResult = {};
       userService.resetPassword(req, (err, result) => {
         if (err) {
-         
           responseResult.success = false;
           responseResult.message = "Reset Password Failed";
           responseResult.error = err;

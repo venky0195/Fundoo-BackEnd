@@ -11,6 +11,11 @@ const Schema = mongoose.Schema;
  * @description:Creating note schema using mongoose
  **/
 var noteSchema = new mongoose.Schema({
+    userId: {
+        type: Schema.Types.ObjectId,
+        required: [true, "User_id required"],
+        ref: 'Note'
+    },
     title: {
         type: String,
         required: [true, "Title required"]
@@ -18,6 +23,13 @@ var noteSchema = new mongoose.Schema({
     description: {
         type: String,
         required: [true, "Description required"]
+    },
+    color: {
+        type: String,
+        required: [true, "Color required"]
+    },
+    reminder: {
+        type: String
     },
 }, {
     timestamps: true
@@ -57,4 +69,44 @@ noteModel.prototype.getNotes = (id, callback) => {
         }
     })
 }
+/**
+ * @description: To update the color of the note
+ * @param {*} noteID 
+ * @param {*} updateParams 
+ * @param {*} callback 
+ */
+noteModel.prototype.updateColor = (noteID, updateParams, callback) => {
+    note.findOneAndUpdate({
+            _id: noteID
+        }, {
+            $set: {
+                color: updateParams
+            }
+        },
+        (err, result) => {
+            if (err) {
+                callback(err)
+            } else {
+                return callback(null, updateParams);
+            }
+        });
+};
+
+noteModel.prototype.reminder = (noteID, reminderParams, callback) => {
+    note.findOneAndUpdate({
+            _id: noteID
+        }, {
+            $set: {
+                reminder: reminderParams
+            }
+        },
+        (err, result) => {
+            if (err) {
+                callback(err)
+            } else {
+                return callback(null, reminderParams)
+            }
+        });
+};
+
 module.exports = new noteModel();

@@ -34,7 +34,7 @@ exports.createNote = (req, res) => {
                         note: result,
                     }
                     responseResult.status = true;
-                    responseResult.message = result;
+                    responseResult.message = "New note created";
                     responseResult.data = userNote;
                     res.status(200).send(responseResult);
                 }
@@ -68,5 +68,75 @@ exports.getNotes = (req, res) => {
         })
     } catch (error) {
         res.send(err)
+    }
+}
+/**
+ * @description: To update the background color of the note
+ * @param {*request from backend} req 
+ * @param {*response from backend} res 
+ */
+exports.updateColor = (req, res) => {
+    try {
+        req.checkBody('noteID', 'noteID required').not().isEmpty();
+        req.checkBody('color', 'color should not be empty').not().isEmpty();
+        var errors = req.validationErrors();
+        var response = {};
+        if (errors) {
+            response.status = false;
+            response.error = errors;
+            return res.status(422).send(response);
+        } else {
+            var responseResult = {};
+            noteID = req.body.noteID;
+            color = req.body.color;
+            noteService.updateColor(noteID, color, (err, result) => {
+                if (err) {
+                    responseResult.status = false;
+                    responseResult.error = err;
+                    res.status(500).send(responseResult);
+                } else {
+                    responseResult.status = true;
+                    responseResult.data = result;
+                    res.status(200).send(responseResult);
+                }
+            })
+        }
+    } catch (error) {
+        res.send(error);
+    }
+}
+/**
+ * @description: To set the reminder for the note
+ * @param {*request from backend} req 
+ * @param {*response from backend} res 
+ */
+
+exports.reminder = (req, res) => {
+    try {
+        req.checkBody('noteID', 'noteID required').not().isEmpty();
+        var errors = req.validationErrors();
+        var response = {};
+        if (errors) {
+            response.status = false;
+            response.error = errors;
+            return res.status(422).send(response);
+        } else {
+            var responseResult = {};
+            noteID = req.body.noteID;
+            reminder = req.body.reminder;
+            noteService.reminder(noteID, reminder, (err, result) => {
+                if (err) {
+                    responseResult.status = false;
+                    responseResult.error = err;
+                    res.status(500).send(responseResult);
+                } else {
+                    responseResult.status = true;
+                    responseResult.data = result;
+                    res.status(200).send(responseResult);
+                }
+            })
+        }
+    } catch (error) {
+        res.send(error)
     }
 }
