@@ -31,6 +31,9 @@ var noteSchema = new mongoose.Schema({
     reminder: {
         type: String
     },
+    archive: {
+        type: Boolean
+    },
 }, {
     timestamps: true
 });
@@ -59,8 +62,9 @@ noteModel.prototype.addNotes = (objectNote, callback) => {
  * @param {*response to backend} callback 
  */
 noteModel.prototype.getNotes = (id, callback) => {
+   // console.log("id is---------------------->", id.decoded);
     note.find({
-        email: id.decoded.payload.email
+        userId: id.decoded.payload.user_id
     }, (err, result) => {
         if (err) {
             callback(err)
@@ -109,4 +113,20 @@ noteModel.prototype.reminder = (noteID, reminderParams, callback) => {
         });
 };
 
+noteModel.prototype.isArchived = (noteID, archiveNote, callback) => {
+    note.findOneAndUpdate({
+            _id: noteID
+        }, {
+            $set: {
+                archive: archiveNote,
+            }
+        },
+        (err, result) => {
+            if (err) {
+                callback(err)
+            } else {
+                return callback(null, archiveNote)
+            }
+        });
+};
 module.exports = new noteModel();

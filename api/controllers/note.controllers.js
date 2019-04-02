@@ -6,6 +6,7 @@
  *  @since          : 26-03-2019
  *****************************************************************************************/
 const noteService = require('../services/note.services');
+
 /**
  * @description:it handles the creating note data
  * @param {*request from frontend} req 
@@ -138,5 +139,42 @@ exports.reminder = (req, res) => {
         }
     } catch (error) {
         res.send(error)
+    }
+}
+/**
+ * @description: To archive the note
+ * @param {*request from backend} req 
+ * @param {*response from backend} res 
+ */
+exports.isArchived = (req, res) => {
+    try {
+        console.log("In note controller isArchived,",req.body);
+        
+        req.checkBody('noteID', 'noteID required').not().isEmpty();
+        req.checkBody('archive', 'archive required').not().isEmpty();
+        var errors = req.validationErrors();
+        var response = {};
+        if (errors) {
+            response.status = false;
+            response.error = errors;
+            return res.status(422).send(response);
+        } else {
+            var responseResult = {};
+            noteID = req.body.noteID;
+            archive = req.body.archive;
+            noteService.isArchived(noteID, archive, (err, result) => {
+                if (err) {
+                    responseResult.status = false;
+                    responseResult.error = err;
+                    res.status(500).send(responseResult);
+                } else {
+                    responseResult.status = true;
+                    responseResult.data = result;
+                    res.status(200).send(responseResult);
+                }
+            })
+        }
+    } catch (error) {
+        res.send(error);
     }
 }

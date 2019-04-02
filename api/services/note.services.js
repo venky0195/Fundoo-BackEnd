@@ -6,7 +6,7 @@
  *  @version        : v0.1
  *  @since          : 26-03-2019
  ******************************************************************************/
-const noteModel = require('/home/admin1/Fundoo/server/api/model/note.model.js');
+const noteModel = require('../model/note.model');
 
 exports.createNote = (data, callback) => {
     noteModel.addNotes(data, (err, result) => {
@@ -14,7 +14,7 @@ exports.createNote = (data, callback) => {
             console.log("service error");
             callback(err);
         } else {
-            console.log("In service", result);
+            console.log("In service");
             callback(null, result);
         }
     });
@@ -26,7 +26,7 @@ exports.getNotes = (data, callback) => {
             console.log("service error");
             callback(err);
         } else {
-        console.log("In service", result);
+        console.log("In service");
             callback(null, result);
         }
     });
@@ -44,8 +44,18 @@ exports.updateColor = (paramID, paramData, callback) => {
     })
 }
 exports.reminder = (paramID, paramData, callback) => {
-    console.log("in services", paramID, paramData);
     noteModel.reminder(paramID, paramData, (err, result) => {
+        if (err) {
+            console.log("service error");
+            callback(err);
+        } else {
+            return callback(null, result)
+        }
+    })
+}
+exports.isArchived = (paramID, paramData, callback) => {
+    console.log("in services", paramID, paramData);
+    noteModel.isArchived(paramID, paramData, (err, result) => {
         if (err) {
             console.log("service error");
             callback(err);
