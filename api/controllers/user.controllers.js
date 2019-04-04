@@ -1,9 +1,9 @@
 const userService = require("../services/user.services");
 const token = require("../../middleware/token");
 const sendMail = require("../../middleware/nodemailer");
-const express = require('express');
-const responseTime = require('response-time')
-const redis = require('redis');
+const express = require("express");
+const responseTime = require("response-time");
+const redis = require("redis");
 /**
  * @description: Validate email and password
  * @param {*request from front-end} req
@@ -34,13 +34,12 @@ exports.login = (req, res) => {
           responseResult.status = true;
           responseResult.message = "Login Successful";
           responseResult.result = result;
-          console.log("result is ",result)
+          console.log("result is ", result);
           const payload = {
             user_id: result._id,
             firstName: result.firstName
-            
           };
-          console.log("payload is ",payload)
+          console.log("payload is ", payload);
           const obj = token.GenerateTokenAuth(payload);
           responseResult.token = obj;
 
@@ -102,7 +101,7 @@ exports.registration = (req, res) => {
   }
 };
 /**
- * @description: Validate all the details using express validator, send an email containing link 
+ * @description: Validate all the details using express validator, send an email containing link
  *               to reset password using node mailer
  * @param {*request from front-end} req
  * @param {*response from back-end} res
@@ -163,7 +162,6 @@ exports.setPassword = (req, res) => {
       response.error = errors;
       return res.status(422).send(response);
     } else {
-
       var responseResult = {};
       userService.resetPassword(req, (err, result) => {
         if (err) {

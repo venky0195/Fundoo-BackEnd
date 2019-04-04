@@ -66,7 +66,6 @@ exports.forgotPassword = (data, callback) => {
  */
 exports.resetPassword = (req, callback) => {
   try {
-    
     userModel.updateUserPassword(req, (err, result) => {
       if (err) {
         console.log("service error");

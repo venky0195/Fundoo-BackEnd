@@ -6,61 +6,72 @@
  *  @version        : v0.1
  *  @since          : 26-03-2019
  ******************************************************************************/
-const noteModel = require('../model/note.model');
+const noteModel = require("../model/note.model");
 
 exports.createNote = (data, callback) => {
-    noteModel.addNotes(data, (err, result) => {
-        if (err) {
-            console.log("service error");
-            callback(err);
-        } else {
-            console.log("In service");
-            callback(null, result);
-        }
-    });
-}
+  noteModel.addNotes(data, (err, result) => {
+    if (err) {
+      console.log("service error");
+      callback(err);
+    } else {
+      console.log("In service");
+      callback(null, result);
+    }
+  });
+};
 
 exports.getNotes = (data, callback) => {
-    noteModel.getNotes(data, (err, result) => {
-        if (err) {
-            console.log("service error");
-            callback(err);
-        } else {
-        console.log("In service");
-            callback(null, result);
-        }
-    });
-}
+  noteModel.getNotes(data, (err, result) => {
+    if (err) {
+      console.log("service error");
+      callback(err);
+    } else {
+      console.log("In service");
+      callback(null, result);
+    }
+  });
+};
 
 exports.updateColor = (paramID, paramData, callback) => {
-    // console.log("in services", paramID, paramData);
-    noteModel.updateColor(paramID, paramData, (err, result) => {
-        if (err) {
-            console.log("service error");
-            callback(err);
-        } else {
-            return callback(null, result);
-        }
-    })
-}
+  // console.log("in services", paramID, paramData);
+  noteModel.updateColor(paramID, paramData, (err, result) => {
+    if (err) {
+      console.log("service error");
+      callback(err);
+    } else {
+      return callback(null, result);
+    }
+  });
+};
 exports.reminder = (paramID, paramData, callback) => {
-    noteModel.reminder(paramID, paramData, (err, result) => {
-        if (err) {
-            console.log("service error");
-            callback(err);
-        } else {
-            return callback(null, result)
-        }
-    })
-}
+  noteModel.reminder(paramID, paramData, (err, result) => {
+    if (err) {
+      console.log("service error");
+      callback(err);
+    } else {
+      return callback(null, result);
+    }
+  });
+};
 exports.isArchived = (paramID, paramData, callback) => {
-    console.log("in services", paramID, paramData);
-    noteModel.isArchived(paramID, paramData, (err, result) => {
-        if (err) {
-            console.log("service error");
-            callback(err);
-        } else {
-            return callback(null, result)
-        }
-    })
-}
+  console.log("in services", paramID, paramData);
+  noteModel.isArchived(paramID, paramData, (err, result) => {
+    if (err) {
+      console.log("service error");
+      callback(err);
+    } else {
+      return callback(null, result);
+    }
+  });
+};
+exports.isTrashed = (paramID, paramData, callback) => {
+  console.log("in trash services", paramID, paramData);
+  noteModel.isTrashed(paramID, paramData, (err, result) => {
+    if (err) {
+      console.log("service error");
+      callback(err);
+    } else {
+      return callback(null, result);
+    }
+  });
+};
