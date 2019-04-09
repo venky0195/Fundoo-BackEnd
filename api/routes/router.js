@@ -20,7 +20,7 @@ router.get("/getNotes", middle.checkToken, noteController.getNotes);
 router.put("/updateColor", middle.checkToken, noteController.updateColor);
 router.put("/reminder", middle.checkToken, noteController.reminder);
 router.put("/isArchived", middle.checkToken, noteController.isArchived);
-router.put("/isTrashed", middle.checkToken, noteController.isTrashed);
+router.put("/isTrash", middle.checkToken, noteController.isTrashed);
 
 // Export API routes
 module.exports = router;
