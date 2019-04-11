@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-// Import user and note controller, authentication
+// Import user controller, authentication
 const userController = require("../controllers/user.controllers");
-const noteController = require("../controllers/note.controllers");
 const middle = require("../authentication/authentication");
+const upload = require("../../middleware/fileUpload");
 
 // Contact routes
 router.post("/", userController.login);
@@ -15,12 +15,12 @@ router.post(
   middle.resetToken,
   userController.setPassword
 );
-router.post("/createNote", middle.checkToken, noteController.createNote);
-router.get("/getNotes", middle.checkToken, noteController.getNotes);
-router.put("/updateColor", middle.checkToken, noteController.updateColor);
-router.put("/reminder", middle.checkToken, noteController.reminder);
-router.put("/isArchived", middle.checkToken, noteController.isArchived);
-router.put("/isTrash", middle.checkToken, noteController.isTrashed);
+router.put(
+  "/setProfilePic",
+  middle.checkToken,
+  upload.single("image"),
+  userController.setProfilePic
+);
 
 // Export API routes
 module.exports = router;

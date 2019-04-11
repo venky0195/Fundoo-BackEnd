@@ -7,7 +7,9 @@
  *  @since          : 09-03-2019
  ******************************************************************************/
 // Import API routers
-const router = require("../server/api/routes/router");
+const UserRouter = require("./api/routes/UserRouter");
+const NoteRouter = require("../server/api/routes/NoteRouter");
+
 // Import express
 const express = require("express");
 // Import Body parser
@@ -47,7 +49,8 @@ mongoose
   });
 
 require("http").createServer(app);
-app.use("/", router);
+app.use("/", UserRouter);
+app.use("/", NoteRouter);
 
 // define a simple route
 app.get("/", (req, res) => {
