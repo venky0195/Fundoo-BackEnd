@@ -6,7 +6,8 @@
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter spec",
     "start": "nodemon server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "build":"node server.js"
   },
   "author": "Venkatesh G",
   "license": "ISC",

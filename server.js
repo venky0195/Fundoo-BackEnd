@@ -8,7 +8,7 @@
  ******************************************************************************/
 // Import API routers
 const UserRouter = require("./api/routes/UserRouter");
-const NoteRouter = require("../server/api/routes/NoteRouter");
+const NoteRouter = require("./api/routes/NoteRouter");
 
 // Import express
 const express = require("express");
@@ -28,7 +28,7 @@ var expressValidator = require("express-validator");
 app.use(expressValidator());
 
 // Configuring the database
-const databaseConfig = require("../server/configuration/database.configuration");
+const databaseConfig = require("./configuration/database.configuration");
 
 require("dotenv").config();
 // Import Mongoose

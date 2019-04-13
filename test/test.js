@@ -9,7 +9,7 @@ function readFile() {
   /**
    * @description:read file from json
    */
-  var data = fs.readFileSync("/home/admin1/fundoo/server/test/test1.json");
+  var data = fs.readFileSync("../test/test1.json");
   var data1 = JSON.parse(data);
   return data1;
 }

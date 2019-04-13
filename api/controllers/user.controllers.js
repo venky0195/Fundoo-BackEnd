@@ -212,7 +212,6 @@ exports.setProfilePic = (req, res) => {
       userID = req.decoded.payload.user_id;
       let image = (req.file.location)
       userService.setProfilePic(userID, image, (err, result) => {
-          console.log("imageeeeeeeeeeeeeeeeeeeeeeee=>", result);
           if (err) {
               responseResult.success = false;
               responseResult.error = err;
