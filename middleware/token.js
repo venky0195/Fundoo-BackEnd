@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
-module.exports = {
-  GenerateToken(payload) {
+
+  exports.GenerateToken=(payload)=> {
+    console.log("generate token generate");
+    
     const token = jwt.sign({ payload }, "secretkey", { expiresIn: "5h" });
     const obj = {
       success: true,
@@ -9,9 +11,8 @@ module.exports = {
     };
     return obj;
   }
-};
-module.exports = {
-  GenerateTokenAuth(payload) {
+
+  exports.GenerateTokenAuth=(payload)=> {
     const token = jwt.sign({ payload }, "secretkey-auth", { expiresIn: "5h" });
     const obj = {
       success: true,
@@ -19,5 +20,5 @@ module.exports = {
       token: token
     };
     return obj;
-  }
+  
 };

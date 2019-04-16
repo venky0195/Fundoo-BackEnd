@@ -242,3 +242,86 @@ exports.isTrashed = (req, res) => {
     res.send(error);
   }
 };
+/**
+ * @description: To update the title of particular note
+ * @param {*request from backend} req
+ * @param {*response from backend} res
+ */
+exports.updateTitle = (req, res) => {
+  try {
+    req
+      .checkBody("noteID", "noteID required")
+      .not()
+      .isEmpty();
+    req
+      .checkBody("title", "title required")
+      .not()
+      .isEmpty();
+    var errors = req.validationErrors();
+    var response = {};
+    if (errors) {
+      response.status = false;
+      response.error = errors;
+      return res.status(422).send(response);
+    } else {
+      var responseResult = {};
+      noteID = req.body.noteID;
+      title = req.body.title;
+      noteService.updateTitle(noteID, title, (err, result) => {
+        if (err) {
+          responseResult.status = false;
+          responseResult.error = err;
+          res.status(500).send(responseResult);
+        } else {
+          responseResult.status = true;
+          responseResult.data = result;
+          res.status(200).send(responseResult);
+        }
+      });
+    }
+  } catch (error) {
+    res.send(error);
+  }
+};
+/**
+ * @description: To update the title of particular note
+ * @param {*request from backend} req
+ * @param {*response from backend} res
+ */
+exports.updateDescription = (req, res) => {
+  try {
+    req
+      .checkBody("noteID", "noteID required")
+      .not()
+      .isEmpty();
+    req
+      .checkBody("description", "description required")
+      .not()
+      .isEmpty();
+
+    var errors = req.validationErrors();
+    var response = {};
+    if (errors) {
+      response.status = false;
+      response.error = errors;
+      return res.status(422).send(response);
+    } else {
+      var responseResult = {};
+      noteID = req.body.noteID;
+      description = req.body.description;
+      noteService.updateDescription(noteID, description, (err, result) => {
+        if (err) {
+          responseResult.status = false;
+          responseResult.error = err;
+          res.status(500).send(responseResult);
+        } else {
+          responseResult.status = true;
+          responseResult.data = result;
+          res.status(200).send(responseResult);
+        }
+      });
+    }
+  } catch (error) {
+    res.send(error);
+  }
+};

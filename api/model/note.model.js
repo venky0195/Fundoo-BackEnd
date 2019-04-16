@@ -167,4 +167,45 @@ noteModel.prototype.isTrashed = (noteID, trashNote, callback) => {
     }
   );
 };
+
+noteModel.prototype.updateTitle = (noteID, titleParams, callback) => {
+  note.findOneAndUpdate(
+    {
+      _id: noteID
+    },
+    {
+      $set: {
+        title: titleParams
+      }
+    },
+    (err, result) => {
+      if (err) {
+        callback(err);
+      } else {
+        return callback(null, titleParams);
+      }
+    }
+  );
+};
+
+noteModel.prototype.updateDescription = (noteID, descParams, callback) => {
+  note.findOneAndUpdate(
+    {
+      _id: noteID
+    },
+    {
+      $set: {
+        description: descParams
+      }
+    },
+    (err, result) => {
+      if (err) {
+        callback(err);
+      } else {
+        return callback(null, descParams);
+      }
+    }
+  );
+};
+
 module.exports = new noteModel();

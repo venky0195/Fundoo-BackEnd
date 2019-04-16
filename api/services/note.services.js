@@ -75,3 +75,27 @@ exports.isTrashed = (paramID, paramData, callback) => {
     }
   });
 };
+
+exports.updateTitle = (paramID, paramData, callback) => {
+  console.log("in services", paramID, paramData);
+  noteModel.updateTitle(paramID, paramData, (err, result) => {
+    if (err) {
+      console.log("service error");
+      callback(err);
+    } else {
+      return callback(null, result);
+    }
+  });
+};
+
+exports.updateDescription = (paramID, paramData, callback) => {
+  console.log("in services", paramID, paramData);
+  noteModel.updateDescription(paramID, paramData, (err, result) => {
+    if (err) {
+      console.log("service error");
+      callback(err);
+    } else {
+      return callback(null, result);
+    }
+  });
+};

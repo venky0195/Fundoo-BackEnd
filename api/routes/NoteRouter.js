@@ -12,6 +12,8 @@ NoteRouter.put("/updateColor", middle.checkToken, noteController.updateColor);
 NoteRouter.put("/reminder", middle.checkToken, noteController.reminder);
 NoteRouter.put("/isArchived", middle.checkToken, noteController.isArchived);
 NoteRouter.put("/isTrash", middle.checkToken, noteController.isTrashed);
+NoteRouter.put('/updateTitle', middle.checkToken, noteController.updateTitle);
+NoteRouter.put('/updateDescription', middle.checkToken, noteController.updateDescription);
 
 // Export API routes
 module.exports = NoteRouter;
