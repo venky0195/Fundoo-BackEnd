@@ -14,6 +14,8 @@ NoteRouter.put("/isArchived", middle.checkToken, noteController.isArchived);
 NoteRouter.put("/isTrash", middle.checkToken, noteController.isTrashed);
 NoteRouter.put('/updateTitle', middle.checkToken, noteController.updateTitle);
 NoteRouter.put('/updateDescription', middle.checkToken, noteController.updateDescription);
+NoteRouter.post('/deleteNote', middle.checkToken, noteController.deleteNote);
+
 
 // Export API routes
 module.exports = NoteRouter;

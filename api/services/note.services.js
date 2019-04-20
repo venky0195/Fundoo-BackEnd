@@ -75,6 +75,16 @@ exports.isTrashed = (paramID, paramData, callback) => {
     }
   });
 };
+exports.deleteNote = (noteID, callback) => {
+  noteModel.deleteNote(noteID, (err, result) => {
+      if (err) {
+          console.log("service error");
+          callback(err)
+      } else {
+          return callback(null, result)
+      }
+  })
+}
 
 exports.updateTitle = (paramID, paramData, callback) => {
   console.log("in services", paramID, paramData);

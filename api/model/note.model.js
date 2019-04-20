@@ -167,7 +167,21 @@ noteModel.prototype.isTrashed = (noteID, trashNote, callback) => {
     }
   );
 };
-
+noteModel.prototype.deleteNote = (data, callback) => {
+  note.deleteOne({
+      _id: data.body.noteID
+  }, (err, result) => {
+      if (err) {
+          callback(err)
+      } else {
+          const obj = {
+              status: 200,
+              msg: "note is deleted successfully"
+          }
+          return callback(null, obj)
+      }
+  })
+}
 noteModel.prototype.updateTitle = (noteID, titleParams, callback) => {
   note.findOneAndUpdate(
     {
