@@ -7,6 +7,7 @@
  *  @since          : 26-03-2019
  ******************************************************************************/
 const noteModel = require("../model/note.model");
+const NotificationModel = require("../model/pushNotification.model")
 
 exports.createNote = (data, callback) => {
   noteModel.addNotes(data, (err, result) => {
@@ -109,3 +110,37 @@ exports.updateDescription = (paramID, paramData, callback) => {
     }
   });
 };
+/**
+ * @description:it will send pinned data to model
+ * @param {*request from frontend} paramID 
+ * @param {*request from frontend} paramData 
+ * @param {*response to backend} callback 
+ */
+exports.isPinned = (paramID, paramData, callback) => {
+  noteModel.isPinned(paramID, paramData, (err, result) => {
+      if (err) {
+          console.log("service error");
+          callback(err);
+      } else {
+          return callback(null, result)
+      }
+  })
+}
+exports.pushNotification=(req, callback) =>{
+
+
+
+
+
+  NotificationModel.updatePushNotification(req, (err, result)=>{
+
+
+    if(err){
+      console.log("service error");
+      callback(err);      
+    }
+    else{
+      return callback(null, result)
+    }
+  })
+}

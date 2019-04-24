@@ -10,7 +10,7 @@ const Schema = mongoose.Schema;
 /**
  * @description:Creating note schema using mongoose
  **/
-var noteSchema = new mongoose.Schema(
+var noteSchema = new Schema(
   {
     userId: {
       type: Schema.Types.ObjectId,
@@ -221,5 +221,28 @@ noteModel.prototype.updateDescription = (noteID, descParams, callback) => {
     }
   );
 };
-
+/**
+ * @description:it will pin or unpin the notes
+ * @param {*request from frontend} noteID 
+ * @param {*request from frontend} pinParams 
+ * @param {*response to backend} callback 
+ */
+noteModel.prototype.isPinned = (noteID, pinParams, callback) => {
+  note.findOneAndUpdate({
+      _id: noteID
+  }, {
+          $set: {
+              pinned: pinParams,
+              trash: false,
+              archive: false
+          }
+      },
+      (err, result) => {
+          if (err) {
+              callback(err)
+          } else {
+              return callback(null, pinParams)
+          }
+      });
+};
 module.exports = new noteModel();

@@ -1,4 +1,5 @@
 /******************************************************************************
+import { firebase } from 'firebase/app';
  *  @Purpose        : To create a server to connect with front end for getting 
                      request and sending response to client
  *  @file           : server.js        
@@ -16,12 +17,45 @@ const express = require("express");
 var bodyParser = require("body-parser");
 // create express app
 const app = express();
+app.use(bodyParser.json());
+/********************************************************/
 
+var admin = require("firebase-admin");
+
+var serviceAccount = require("./fundoo-notess-firebase-adminsdk-hp13s-20ba4a3d2e.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://fundoo-notess.firebaseio.com"
+});
+
+var registrationToken =
+  "dnCcwvjoHj8:APA91bEvmA8Ah21b8Kcwvccr9CADky3rN-Y0eU6j_Z7bx_eRsj6p-_dbJzpULPfaG5aDpuYBMfCyozDestc-rcBuRqCITttPAwwlk3suMAs3eAo7rVVWvJ83hW-ats5Vp32Y0__6WOs1";
+
+var payload = {
+  notification: {
+    title: "Fundoo notification check",
+    body: "Working"
+  }
+};
+
+var options = {
+  priority: "high",
+  timeToLive: 60 * 60 * 24
+};
+
+admin
+  .messaging()
+  .sendToDevice(registrationToken, payload, options)
+  .then(function(response) {
+    console.log("Successfully sent message: ", response);
+  })
+  .catch(function(error) {
+    console.log("Error sending message: ", error);
+  });
+/***************************************************************/
 // Configure bodyparser to handle post requests
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// parse requests of content-type - application/json
-app.use(bodyParser.json());
 
 //To perform validations
 var expressValidator = require("express-validator");
@@ -63,4 +97,5 @@ app.get("/", (req, res) => {
 const server = app.listen(4000, () => {
   console.log("Server is listening on port 4000");
 });
+
 module.exports = app;

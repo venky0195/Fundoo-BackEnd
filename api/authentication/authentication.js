@@ -3,6 +3,7 @@ exports.checkToken = (req, res, next) => {
   console.log("request in authentication", req.body);
 
   var token1 = req.headers["token"];
+  
   console.log("token-------->", token1);
   if (token1) {
     jwt.verify(token1, "secretkey-auth", (err, decoded) => {

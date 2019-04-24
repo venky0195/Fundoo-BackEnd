@@ -15,6 +15,9 @@ NoteRouter.put("/isTrash", middle.checkToken, noteController.isTrashed);
 NoteRouter.put('/updateTitle', middle.checkToken, noteController.updateTitle);
 NoteRouter.put('/updateDescription', middle.checkToken, noteController.updateDescription);
 NoteRouter.post('/deleteNote', middle.checkToken, noteController.deleteNote);
+NoteRouter.put('/isPinned', middle.checkToken, noteController.isPinned);
+NoteRouter.post("/pushNotification", middle.checkToken, noteController.pushNotification);
+// NoteRouter.get("/sendPushNotification/:userid", noteController.sendPushNotification)
 
 
 // Export API routes

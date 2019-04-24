@@ -361,3 +361,67 @@ exports.updateDescription = (req, res) => {
     res.send(error);
   }
 };
+/**
+ * @description:It handles the pinned notes
+ * @param {*request from frontend} req 
+ * @param {*response from backend} res 
+ */
+exports.isPinned = (req, res) => {
+  try {
+      req.checkBody('noteID', 'noteID required').not().isEmpty();
+      var errors = req.validationErrors();
+      var response = {};
+      if (errors) {
+          response.status = false;
+          response.error = errors;
+          return res.status(422).send(response);
+      } else {
+          var responseResult = {};
+          noteID = req.body.noteID;
+          pinned = req.body.pinned;
+          noteService.isPinned(noteID, pinned, (err, result) => {
+              if (err) {
+                  responseResult.status = false;
+                  responseResult.error = err;
+                  res.status(500).send(responseResult);
+              } else {
+                  responseResult.status = true;
+                  responseResult.data = result;
+                  res.status(200).send(responseResult);
+              }
+          })
+      }
+  } catch (error) {
+      res.send(error)
+  }
+}
+
+exports.pushNotification = (req, res) =>{
+  try {
+    console.log("Reqest from backend in pushNotification==================",req.body);
+    
+    req.checkBody("pushToken", "pushToken required").not().isEmpty();
+    var errors = req.validationErrors();
+    var response = {};
+    if(errors){
+      response.status = false;
+      response.error = errors;
+      return res.status(422).send(response);
+    } else {
+      var responseResult = {};
+      noteService.pushNotification(req, (err, result) => {
+        if (err) {
+            responseResult.status = false;
+            responseResult.error = err;
+            res.status(500).send(responseResult);
+        } else {
+            responseResult.status = true;
+            responseResult.data = result;
+            res.status(200).send(responseResult);
+        }
+    })
+    }
+  } catch (error) {
+    res.send(error)    
+  }
+}
