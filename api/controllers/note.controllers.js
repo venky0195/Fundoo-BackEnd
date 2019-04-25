@@ -363,47 +363,210 @@ exports.updateDescription = (req, res) => {
 };
 /**
  * @description:It handles the pinned notes
- * @param {*request from frontend} req 
- * @param {*response from backend} res 
+ * @param {*request from frontend} req
+ * @param {*response from backend} res
  */
 exports.isPinned = (req, res) => {
   try {
-      req.checkBody('noteID', 'noteID required').not().isEmpty();
-      var errors = req.validationErrors();
-      var response = {};
-      if (errors) {
-          response.status = false;
-          response.error = errors;
-          return res.status(422).send(response);
-      } else {
-          var responseResult = {};
-          noteID = req.body.noteID;
-          pinned = req.body.pinned;
-          noteService.isPinned(noteID, pinned, (err, result) => {
-              if (err) {
-                  responseResult.status = false;
-                  responseResult.error = err;
-                  res.status(500).send(responseResult);
-              } else {
-                  responseResult.status = true;
-                  responseResult.data = result;
-                  res.status(200).send(responseResult);
-              }
-          })
-      }
-  } catch (error) {
-      res.send(error)
-  }
-}
-
-exports.pushNotification = (req, res) =>{
-  try {
-    console.log("Reqest from backend in pushNotification==================",req.body);
-    
-    req.checkBody("pushToken", "pushToken required").not().isEmpty();
+    req
+      .checkBody("noteID", "noteID required")
+      .not()
+      .isEmpty();
     var errors = req.validationErrors();
     var response = {};
-    if(errors){
+    if (errors) {
+      response.status = false;
+      response.error = errors;
+      return res.status(422).send(response);
+    } else {
+      var responseResult = {};
+      noteID = req.body.noteID;
+      pinned = req.body.pinned;
+      noteService.isPinned(noteID, pinned, (err, result) => {
+        if (err) {
+          responseResult.status = false;
+          responseResult.error = err;
+          res.status(500).send(responseResult);
+        } else {
+          responseResult.status = true;
+          responseResult.data = result;
+          res.status(200).send(responseResult);
+        }
+      });
+    }
+  } catch (error) {
+    res.send(error);
+  }
+};
+
+/**
+ * @description:It adds the label
+ * @param {*request from frontend} req
+ * @param {*response from backend} res
+ */
+exports.addLabel = (req, res) => {
+  try {
+    req
+      .checkBody("label", "label required")
+      .not()
+      .isEmpty();
+    var errors = req.validationErrors();
+    var response = {};
+    if (errors) {
+      response.status = false;
+      response.error = errors;
+      return res.status(422).send(response);
+    } else {
+      var responseResult = {};
+      const labelData = {
+        userID: req.decoded.payload.user_id,
+        label: req.body.label
+      };
+      noteService.addLabel(labelData, (err, result) => {
+        if (err) {
+          responseResult.status = false;
+          responseResult.error = err;
+          res.status(500).send(responseResult);
+        } else {
+          responseResult.status = true;
+          responseResult.data = result;
+          res.status(200).send(responseResult);
+        }
+      });
+    }
+  } catch (error) {
+    res.send(error);
+  }
+};
+/**
+ * @description:It returns all the labels present in the database
+ * @param {*request from frontend} req
+ * @param {*response from backend} res
+ */
+exports.getLabels = (req, res) => {
+  try {
+    var errors = req.validationErrors();
+    var response = {};
+    if (errors) {
+      response.status = false;
+      response.error = errors;
+      return res.status(422).send(response);
+    } else {
+      var responseResult = {};
+      const labelData = {
+        userID: req.decoded.payload.user_id
+      };
+      noteService.getLabels(labelData, (err, result) => {
+        if (err) {
+          responseResult.status = false;
+          responseResult.error = err;
+          res.status(500).send(responseResult);
+        } else {
+          responseResult.status = true;
+          responseResult.data = result;
+          res.status(200).send(responseResult);
+        }
+      });
+    }
+  } catch (error) {
+    res.send(error);
+  }
+};
+/**
+ * @description:It deletes the label from the database
+ * @param {*request from frontend} req
+ * @param {*response from backend} res
+ */
+exports.deleteLabel = (req, res) => {
+  try {
+    req
+      .checkBody("labelID", "labelID required")
+      .not()
+      .isEmpty();
+    var errors = req.validationErrors();
+    var response = {};
+    if (errors) {
+      response.status = false;
+      response.error = errors;
+      return res.status(422).send(response);
+    } else {
+      var responseResult = {};
+      const labelData = {
+        labelID: req.body.labelID
+      };
+      noteService.deleteLabel(labelData, (err, result) => {
+        if (err) {
+          responseResult.status = false;
+          responseResult.error = err;
+          res.status(500).send(responseResult);
+        } else {
+          responseResult.status = true;
+          responseResult.data = result;
+          res.status(200).send(responseResult);
+        }
+      });
+    }
+  } catch (error) {
+    res.send(error);
+  }
+};
+/**
+ * @description:It updates the label
+ * @param {*request from frontend} req
+ * @param {*response from backend} res
+ */
+exports.updateLabel = (req, res) => {
+  try {
+    req
+      .checkBody("labelID", "labelID required")
+      .not()
+      .isEmpty();
+    req
+      .checkBody("editLabel", "editLabel required")
+      .not()
+      .isEmpty();
+    var errors = req.validationErrors();
+    var response = {};
+    if (errors) {
+      response.status = false;
+      response.error = errors;
+      return res.status(422).send(response);
+    } else {
+      var responseResult = {};
+      const labelData = {
+        editLabel: req.body.editLabel,
+        labelID: req.body.labelID
+      };
+      noteService.updateLabel(labelData, (err, result) => {
+        if (err) {
+          responseResult.status = false;
+          responseResult.error = err;
+          res.status(500).send(responseResult);
+        } else {
+          responseResult.status = true;
+          responseResult.data = result;
+          res.status(200).send(responseResult);
+        }
+      });
+    }
+  } catch (error) {
+    res.send(error);
+  }
+};
+
+exports.pushNotification = (req, res) => {
+  try {
+    console.log(
+      "Reqest from backend in pushNotification==================",
+      req.body
+    );
+    req
+      .checkBody("pushToken", "pushToken required")
+      .not()
+      .isEmpty();
+    var errors = req.validationErrors();
+    var response = {};
+    if (errors) {
       response.status = false;
       response.error = errors;
       return res.status(422).send(response);
@@ -411,17 +574,39 @@ exports.pushNotification = (req, res) =>{
       var responseResult = {};
       noteService.pushNotification(req, (err, result) => {
         if (err) {
-            responseResult.status = false;
-            responseResult.error = err;
-            res.status(500).send(responseResult);
+          responseResult.status = false;
+          responseResult.error = err;
+          res.status(500).send(responseResult);
         } else {
-            responseResult.status = true;
-            responseResult.data = result;
-            res.status(200).send(responseResult);
+          responseResult.status = true;
+          responseResult.data = result;
+          res.status(200).send(responseResult);
         }
-    })
+      });
     }
   } catch (error) {
-    res.send(error)    
+    res.send(error);
   }
-}
+};
+
+exports.sendPushNotification = (req, res) => {
+  try {
+    console.log("USER ID GIVEN IS ", req.params.userid);
+
+    var responseResult = {};
+    var user_id = req.params.userid;
+    noteService.sendPushNotification(user_id, (err, result) => {
+      if (err) {
+        responseResult.status = false;
+        responseResult.error = err;
+        res.status(500).send(responseResult);
+      } else {
+        responseResult.status = true; 
+        responseResult.data = "Notification sent successfully!!"
+        res.status(200).send(responseResult);
+      }
+    });
+  } catch (error) {
+    res.send(error);
+  }
+};

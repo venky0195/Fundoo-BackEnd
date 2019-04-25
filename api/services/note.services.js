@@ -7,8 +7,8 @@
  *  @since          : 26-03-2019
  ******************************************************************************/
 const noteModel = require("../model/note.model");
-const NotificationModel = require("../model/pushNotification.model")
-
+const NotificationModel = require("../model/pushNotification.model");
+var sendPush = require("../../send");
 exports.createNote = (data, callback) => {
   noteModel.addNotes(data, (err, result) => {
     if (err) {
@@ -78,14 +78,14 @@ exports.isTrashed = (paramID, paramData, callback) => {
 };
 exports.deleteNote = (noteID, callback) => {
   noteModel.deleteNote(noteID, (err, result) => {
-      if (err) {
-          console.log("service error");
-          callback(err)
-      } else {
-          return callback(null, result)
-      }
-  })
-}
+    if (err) {
+      console.log("service error");
+      callback(err);
+    } else {
+      return callback(null, result);
+    }
+  });
+};
 
 exports.updateTitle = (paramID, paramData, callback) => {
   console.log("in services", paramID, paramData);
@@ -110,37 +110,93 @@ exports.updateDescription = (paramID, paramData, callback) => {
     }
   });
 };
-/**
- * @description:it will send pinned data to model
- * @param {*request from frontend} paramID 
- * @param {*request from frontend} paramData 
- * @param {*response to backend} callback 
- */
+
 exports.isPinned = (paramID, paramData, callback) => {
   noteModel.isPinned(paramID, paramData, (err, result) => {
-      if (err) {
-          console.log("service error");
-          callback(err);
-      } else {
-          return callback(null, result)
-      }
-  })
-}
-exports.pushNotification=(req, callback) =>{
-
-
-
-
-
-  NotificationModel.updatePushNotification(req, (err, result)=>{
-
-
-    if(err){
+    if (err) {
       console.log("service error");
-      callback(err);      
+      callback(err);
+    } else {
+      return callback(null, result);
     }
-    else{
-      return callback(null, result)
+  });
+};
+
+exports.addLabel = (labelData, callback) => {
+  noteModel.addLabel(labelData, (err, result) => {
+    if (err) {
+      console.log("service error");
+      callback(err);
+    } else {
+      return callback(null, result);
     }
-  })
-}
+  });
+};
+
+exports.getLabels = (labelData, callback) => {
+  noteModel.getLabels(labelData, (err, result) => {
+    if (err) {
+      console.log("service error");
+      callback(err);
+    } else {
+      return callback(null, result);
+    }
+  });
+};
+
+exports.deleteLabel = (labelData, callback) => {
+  noteModel.deleteLabel(labelData, (err, result) => {
+    if (err) {
+      console.log("service error");
+      callback(err);
+    } else {
+      return callback(null, result);
+    }
+  });
+};
+
+exports.updateLabel = (labelData, callback) => {
+  noteModel.updateLabel(labelData, (err, result) => {
+    if (err) {
+      console.log("service error");
+      callback(err);
+    } else {
+      return callback(null, result);
+    }
+  });
+};
+
+exports.pushNotification = (req, callback) => {
+  NotificationModel.updatePushNotification(req, (err, result) => {
+    if (err) {
+      console.log("service error");
+      callback(err);
+    } else {
+      return callback(null, result);
+    }
+  });
+};
+
+exports.sendPushNotification = (user_id, callback) => {
+  NotificationModel.sendPushNotification(user_id, (err, result) => {
+    if (err) {
+      console.log("service error");
+      callback(err);
+    } else {
+      console.log("IN SERVICE RESUT IS ", result);
+      sendPush.SendPushNotify(result);
+      return callback(null, result);
+    }
+  });
+};
+
+exports.checkForReminders = () => {
+  var d1 = new Date(),
+   d2 = new Date(d1);
+  d2.setMinutes(d1.getMinutes() + 1);
+  d1.toString(); d2.toString()
+  console.log("Original date", d1());
+  console.log("Plusone date ", d2());
+
+  
+};

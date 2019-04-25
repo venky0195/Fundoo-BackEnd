@@ -168,20 +168,23 @@ noteModel.prototype.isTrashed = (noteID, trashNote, callback) => {
   );
 };
 noteModel.prototype.deleteNote = (data, callback) => {
-  note.deleteOne({
+  note.deleteOne(
+    {
       _id: data.body.noteID
-  }, (err, result) => {
+    },
+    (err, result) => {
       if (err) {
-          callback(err)
+        callback(err);
       } else {
-          const obj = {
-              status: 200,
-              msg: "note is deleted successfully"
-          }
-          return callback(null, obj)
+        const obj = {
+          status: 200,
+          msg: "note is deleted successfully"
+        };
+        return callback(null, obj);
       }
-  })
-}
+    }
+  );
+};
 noteModel.prototype.updateTitle = (noteID, titleParams, callback) => {
   note.findOneAndUpdate(
     {
@@ -223,25 +226,114 @@ noteModel.prototype.updateDescription = (noteID, descParams, callback) => {
 };
 /**
  * @description:it will pin or unpin the notes
- * @param {*request from frontend} noteID 
- * @param {*request from frontend} pinParams 
- * @param {*response to backend} callback 
+ * @param {*request from frontend} noteID
+ * @param {*request from frontend} pinParams
+ * @param {*response to backend} callback
  */
 noteModel.prototype.isPinned = (noteID, pinParams, callback) => {
-  note.findOneAndUpdate({
+  note.findOneAndUpdate(
+    {
       _id: noteID
-  }, {
+    },
+    {
+      $set: {
+        pinned: pinParams,
+        trash: false,
+        archive: false
+      }
+    },
+    (err, result) => {
+      if (err) {
+        callback(err);
+      } else {
+        return callback(null, pinParams);
+      }
+    }
+  );
+};
+/**
+ * @description:Creating label schema using mongoose
+ **/
+var labelSchema = new mongoose.Schema({
+  userID: {
+      type: Schema.Types.ObjectId,
+      ref: 'labelSchema'
+  },
+  label: {
+      type: String,
+      require: [true, "Label required"],
+      unique: true
+  }
+}, {
+      timestamps: true
+  }
+)
+var label = mongoose.model('Label', labelSchema);
+
+noteModel.prototype.addLabel = (labelData, callback) => {
+  console.log("label save", labelData);
+  const data = new label(labelData);
+  data.save((err, result) => {
+      if (err) {
+          console.log(err);
+          callback(err);
+      } else {
+          console.log("labels", result);
+          return callback(null, result);
+      }
+  })
+};
+
+noteModel.prototype.getLabels = (id, callback) => {
+  console.log("in getlabels of model", id);
+  label.find({ userID: id.userID }, (err, result) => {
+      if (err) {
+          callback(err)
+      } else {
+          console.log("labels", result)
+          return callback(null, result)
+      }
+  })
+};
+
+noteModel.prototype.deleteLabel = (id, callback) => {
+  console.log("in deletelabel of model", id);
+  label.deleteOne({ _id: id.labelID }, (err, result) => {
+      if (err) {
+          callback(err)
+      } else {
+          console.log("labels", result)
+          return callback(null, result)
+      }
+  })
+};
+
+noteModel.prototype.updateLabel = (changedLabel, callback) => {
+  var editLabel = null;
+  var labelId = null;
+  console.log("in updatelabel of  model", changedLabel);
+  if (changedLabel != null) {
+      editLabel = changedLabel.editLabel;
+      labelId = changedLabel.labelID
+  } else {
+      callback("Pinned note not found")
+  }
+  label.findOneAndUpdate(
+      {
+          _id: labelId
+      },
+      {
           $set: {
-              pinned: pinParams,
-              trash: false,
-              archive: false
+              label: editLabel
           }
       },
       (err, result) => {
           if (err) {
+              console.log("in modelerr");
               callback(err)
           } else {
-              return callback(null, pinParams)
+              console.log("in update label modelsuccess");
+              return callback(null, changedLabel)
           }
       });
 };

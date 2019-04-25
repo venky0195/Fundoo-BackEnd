@@ -8,7 +8,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 /**
- * @description:Creating note schema using mongoose
+ * @description:Creating notification schema using mongoose
  **/
 var notificationSchema = new mongoose.Schema(
   {
@@ -46,11 +46,33 @@ NotificationModel.prototype.updatePushNotification = (req, callback) => {
         console.log("error");
         callback(err);
       } else {
+        console.log("success", result)
         return callback(null, result);
-        console.log("success", result);
       }
     }
   );
 };
 
+NotificationModel.prototype.sendPushNotification = (user_id, callback) =>{
+  pushNotification.findOne(
+    {
+      userId: user_id
+    },
+    (err, result)=>{
+      if(err){
+        console.log("Error", err);
+        callback(err);
+      } else{
+        console.log("Success..Push token is --->", result.pushToken);
+        return callback(null, result.pushToken)
+      }
+    }
+  )
+}
+
 module.exports = new NotificationModel();
+
+
+
+
+

@@ -20,39 +20,6 @@ const app = express();
 app.use(bodyParser.json());
 /********************************************************/
 
-var admin = require("firebase-admin");
-
-var serviceAccount = require("./fundoo-notess-firebase-adminsdk-hp13s-20ba4a3d2e.json");
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://fundoo-notess.firebaseio.com"
-});
-
-var registrationToken =
-  "dnCcwvjoHj8:APA91bEvmA8Ah21b8Kcwvccr9CADky3rN-Y0eU6j_Z7bx_eRsj6p-_dbJzpULPfaG5aDpuYBMfCyozDestc-rcBuRqCITttPAwwlk3suMAs3eAo7rVVWvJ83hW-ats5Vp32Y0__6WOs1";
-
-var payload = {
-  notification: {
-    title: "Fundoo notification check",
-    body: "Working"
-  }
-};
-
-var options = {
-  priority: "high",
-  timeToLive: 60 * 60 * 24
-};
-
-admin
-  .messaging()
-  .sendToDevice(registrationToken, payload, options)
-  .then(function(response) {
-    console.log("Successfully sent message: ", response);
-  })
-  .catch(function(error) {
-    console.log("Error sending message: ", error);
-  });
 /***************************************************************/
 // Configure bodyparser to handle post requests
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -96,6 +63,18 @@ app.get("/", (req, res) => {
 // listen for requests
 const server = app.listen(4000, () => {
   console.log("Server is listening on port 4000");
+});
+
+var schedule = require("node-schedule");
+var j = schedule.scheduleJob("*/5 * * * * *", function() {
+  console.log("The world is going to end today.");
+  var d1 = new Date(),
+    d2 = new Date(d1);
+  d2.setMinutes(d1.getMinutes() + 1);
+  d1.toString();
+  d2.toString();
+  console.log("Original date", d1);
+  console.log("Plusone date ", d2);
 });
 
 module.exports = app;
