@@ -37,6 +37,8 @@ const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
 // Connecting to the database
+// useNewUrlParser: true==> Mongoose lets you start using your models immediately,
+// without waiting for mongoose to establish a connection to MongoDB.
 mongoose
   .connect(databaseConfig.url, {
     useNewUrlParser: true
@@ -48,6 +50,9 @@ mongoose
     console.log("Could not connect to the database.", err);
     process.exit();
   });
+//useCreateIndex - False by default. Set to true to make Mongoose's default index build use createIndex()
+// instead of ensureIndex() to avoid deprecation warnings from the MongoDB driver.
+mongoose.set("useCreateIndex", true);
 
 require("http").createServer(app);
 app.use("/", UserRouter);
@@ -59,22 +64,16 @@ app.get("/", (req, res) => {
     message: "Welcome to Fundoo App"
   });
 });
-
+const noteService = require("./api/services/note.services");
 // listen for requests
 const server = app.listen(4000, () => {
   console.log("Server is listening on port 4000");
 });
 
+//Scheduling job to fetch reminders and notify
 var schedule = require("node-schedule");
-var j = schedule.scheduleJob("*/5 * * * * *", function() {
-  console.log("The world is going to end today.");
-  var d1 = new Date(),
-    d2 = new Date(d1);
-  d2.setMinutes(d1.getMinutes() + 1);
-  d1.toString();
-  d2.toString();
-  console.log("Original date", d1);
-  console.log("Plusone date ", d2);
+var j = schedule.scheduleJob("*/1 * * * *", function() {
+  noteService.checkForReminders();
 });
 
 module.exports = app;

@@ -254,58 +254,60 @@ noteModel.prototype.isPinned = (noteID, pinParams, callback) => {
 /**
  * @description:Creating label schema using mongoose
  **/
-var labelSchema = new mongoose.Schema({
-  userID: {
+var labelSchema = new mongoose.Schema(
+  {
+    userID: {
       type: Schema.Types.ObjectId,
-      ref: 'labelSchema'
-  },
-  label: {
+      ref: "labelSchema"
+    },
+    label: {
       type: String,
       require: [true, "Label required"],
       unique: true
+    }
+  },
+  {
+    timestamps: true
   }
-}, {
-      timestamps: true
-  }
-)
-var label = mongoose.model('Label', labelSchema);
+);
+var label = mongoose.model("Label", labelSchema);
 
 noteModel.prototype.addLabel = (labelData, callback) => {
   console.log("label save", labelData);
   const data = new label(labelData);
   data.save((err, result) => {
-      if (err) {
-          console.log(err);
-          callback(err);
-      } else {
-          console.log("labels", result);
-          return callback(null, result);
-      }
-  })
+    if (err) {
+      console.log(err);
+      callback(err);
+    } else {
+      console.log("labels", result);
+      return callback(null, result);
+    }
+  });
 };
 
 noteModel.prototype.getLabels = (id, callback) => {
   console.log("in getlabels of model", id);
   label.find({ userID: id.userID }, (err, result) => {
-      if (err) {
-          callback(err)
-      } else {
-          console.log("labels", result)
-          return callback(null, result)
-      }
-  })
+    if (err) {
+      callback(err);
+    } else {
+      console.log("labels", result);
+      return callback(null, result);
+    }
+  });
 };
 
 noteModel.prototype.deleteLabel = (id, callback) => {
   console.log("in deletelabel of model", id);
   label.deleteOne({ _id: id.labelID }, (err, result) => {
-      if (err) {
-          callback(err)
-      } else {
-          console.log("labels", result)
-          return callback(null, result)
-      }
-  })
+    if (err) {
+      callback(err);
+    } else {
+      console.log("labels", result);
+      return callback(null, result);
+    }
+  });
 };
 
 noteModel.prototype.updateLabel = (changedLabel, callback) => {
@@ -313,28 +315,60 @@ noteModel.prototype.updateLabel = (changedLabel, callback) => {
   var labelId = null;
   console.log("in updatelabel of  model", changedLabel);
   if (changedLabel != null) {
-      editLabel = changedLabel.editLabel;
-      labelId = changedLabel.labelID
+    editLabel = changedLabel.editLabel;
+    labelId = changedLabel.labelID;
   } else {
-      callback("Pinned note not found")
+    callback("Pinned note not found");
   }
   label.findOneAndUpdate(
-      {
-          _id: labelId
-      },
-      {
-          $set: {
-              label: editLabel
-          }
-      },
-      (err, result) => {
-          if (err) {
-              console.log("in modelerr");
-              callback(err)
-          } else {
-              console.log("in update label modelsuccess");
-              return callback(null, changedLabel)
-          }
-      });
+    {
+      _id: labelId
+    },
+    {
+      $set: {
+        label: editLabel
+      }
+    },
+    (err, result) => {
+      if (err) {
+        console.log("in modelerr");
+        callback(err);
+      } else {
+        console.log("in update label modelsuccess");
+        return callback(null, changedLabel);
+      }
+    }
+  );
 };
+
+noteModel.prototype.getReminders = (d1, d2, callback) => {
+  // console.log("id is---------------------->", id.decoded);
+  note.find((err, result) => {
+    if (err) {
+      callback(err);
+    } else {
+      const details = [];
+      result.forEach(function(value) {
+        if (value.reminder.length > 1) {
+          // console.log("original is "+d1+" < "+value.reminder+"==="+ (d1<value.reminder)       );
+          if (value.reminder >= d1 && value.reminder <= d2) {
+            userIdReminder = [
+              value.userId + ", " + value.title + ", " + value.description
+            ];
+            console.log("IN IF---------->", userIdReminder);
+            details.push(userIdReminder);
+          }
+        }
+      });
+      // console.log("DETAILS+++", details);
+      //  details.filter(item => item.trim() !== '')
+      if (details.length > 0) {
+        callback(null, details);
+      } else {
+        callback(null, "No reminders found");
+      }
+    }
+  });
+};
+
 module.exports = new noteModel();

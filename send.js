@@ -7,13 +7,13 @@ admin.initializeApp({
 });
 
 module.exports = {
-  SendPushNotify(token) {
+  SendPushNotify(token, title, body) {
     var registrationToken = token;
 
     var payload = {
       notification: {
-        title: "Fundoo notification check",
-        body: "Working"
+        title: title,
+        body: body
       }
     };
 

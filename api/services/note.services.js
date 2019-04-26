@@ -183,20 +183,45 @@ exports.sendPushNotification = (user_id, callback) => {
       console.log("service error");
       callback(err);
     } else {
-      console.log("IN SERVICE RESUT IS ", result);
+      console.log("IN SERVICE RESUT OF SEND NOTIFICATION IS ", result);
       sendPush.SendPushNotify(result);
       return callback(null, result);
     }
   });
 };
 
+/**
+ * @description: Here we create 1 current date-time object and create another object by adding one minute extra to it.
+ *               Passing the date objects to the model.
+ */
+
 exports.checkForReminders = () => {
   var d1 = new Date(),
-   d2 = new Date(d1);
+    d2 = new Date(d1);
   d2.setMinutes(d1.getMinutes() + 1);
-  d1.toString(); d2.toString()
-  console.log("Original date", d1());
-  console.log("Plusone date ", d2());
-
-  
+  d1 = d1.toLocaleString();
+  d2 = d2.toLocaleString();
+  noteModel.getReminders(d1, d2, (err, result) => {
+    if (err) {
+      console.log("Service error");
+    } else {
+      console.log("In service result is ", result);
+      if (Array.isArray(result)) {
+        console.log("TEST ARRAY+++++++++++++++++++++++", result[0][0]);
+        var temp = result[0][0].split(",");
+        var userId = temp[0];
+        var title = temp[1];
+        var body = temp[2];
+        NotificationModel.sendPushNotification(userId, (err, result) => {
+          if (err) {
+            console.log("service error");
+          } else {
+            console.log("IN SERVICE RESULT IS ",result);
+            sendPush.SendPushNotify(result, title, body);
+            // return callback(null, result);
+          }
+        });
+      }
+    }
+  });
 };
