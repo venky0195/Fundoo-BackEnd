@@ -46,6 +46,7 @@ var noteSchema = new Schema(
 var note = mongoose.model("Note", noteSchema);
 
 function noteModel() {}
+function sample() {}
 /**
  * @description:it will add the notes data using note schema and save the data into the database
  * @param {*request from frontend} objectNote
@@ -318,7 +319,7 @@ noteModel.prototype.updateLabel = (changedLabel, callback) => {
     editLabel = changedLabel.editLabel;
     labelId = changedLabel.labelID;
   } else {
-    callback("Pinned note not found");
+    callback("Update label");
   }
   label.findOneAndUpdate(
     {

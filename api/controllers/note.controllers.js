@@ -494,6 +494,8 @@ exports.deleteLabel = (req, res) => {
       const labelData = {
         labelID: req.body.labelID
       };
+      console.log("Label data===>",labelData);
+      
       noteService.deleteLabel(labelData, (err, result) => {
         if (err) {
           responseResult.status = false;
@@ -516,6 +518,8 @@ exports.deleteLabel = (req, res) => {
  * @param {*response from backend} res
  */
 exports.updateLabel = (req, res) => {
+  console.log("HERE");
+  
   try {
     req
       .checkBody("labelID", "labelID required")
@@ -540,7 +544,7 @@ exports.updateLabel = (req, res) => {
       noteService.updateLabel(labelData, (err, result) => {
         if (err) {
           responseResult.status = false;
-          responseResult.error = err;
+          responseResult.error = "Make some changes";
           res.status(500).send(responseResult);
         } else {
           responseResult.status = true;
