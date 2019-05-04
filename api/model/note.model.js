@@ -37,7 +37,13 @@ var noteSchema = new Schema(
     },
     trash: {
       type: Boolean
-    }
+    },
+    label: [
+      {
+        type: String,
+        ref: "labelSchema"
+      }
+    ]
   },
   {
     timestamps: true
@@ -337,6 +343,83 @@ noteModel.prototype.updateLabel = (changedLabel, callback) => {
       } else {
         console.log("in update label modelsuccess");
         return callback(null, changedLabel);
+      }
+    }
+  );
+};
+
+noteModel.prototype.saveLabelToNote = (labelParams, callback) => {
+  console.log("in save label to note model", labelParams);
+  var labelledNote = null;
+  var noteID = null;
+  if (labelParams != null) {
+    labelledNote = labelParams.label;
+    noteID = labelParams.noteID;
+  } else {
+    callback("NodeId should not be null");
+  }
+  note.findOneAndUpdate(
+    {
+      _id: noteID
+    },
+    {
+      $push: {
+        label: labelledNote
+      }
+    },
+    (err, result) => {
+      if (err) {
+        console.log("error in save label to note in model", err);
+
+        callback(err);
+      } else {
+        //console.log("in model success",result);
+        let res = result.label;
+
+        res.push(labelledNote);
+        console.log("RES IS ", res);
+
+        return callback(null, res);
+      }
+    }
+  );
+};
+
+noteModel.prototype.deleteLabelToNote = (labelParams, callback) => {
+  console.log("in delete label to note model", labelParams);
+  var labelledNote = null;
+  var noteID = null;
+  if (labelParams != null) {
+    labelledNote = labelParams.label;
+    noteID = labelParams.noteID;
+    //console.log("LABEL PARAMS VALUE",labelParams.label);
+  } else {
+    callback("NodeId should not be null");
+  }
+  note.findOneAndUpdate(
+    {
+      _id: noteID
+    },
+    {
+      $pull: {
+        label: labelledNote
+      }
+    },
+    (err, result) => {
+      if (err) {
+        callback(err);
+      } else {
+        let newArray = result.label;
+        console.log("in model success result", result.label);
+
+        for (let i = 0; i < newArray.length; i++) {
+          if (newArray[i] === labelledNote) {
+            newArray.splice(i, 1);
+            console.log("FINAL ARRAY IS ", newArray);
+
+            return callback(null, newArray);
+          }
+        }
       }
     }
   );

@@ -19,17 +19,30 @@ NoteRouter.put(
 );
 NoteRouter.post("/deleteNote", middle.checkToken, noteController.deleteNote);
 NoteRouter.put("/isPinned", middle.checkToken, noteController.isPinned);
-NoteRouter.post('/addLabel', middle.checkToken, noteController.addLabel);
-NoteRouter.get('/getLabels', middle.checkToken, noteController.getLabels)
-NoteRouter.post('/deleteLabel', middle.checkToken, noteController.deleteLabel);
-NoteRouter.put('/updateLabel', middle.checkToken, noteController.updateLabel);
+NoteRouter.post("/addLabel", middle.checkToken, noteController.addLabel);
+NoteRouter.get("/getLabels", middle.checkToken, noteController.getLabels);
+NoteRouter.post("/deleteLabel", middle.checkToken, noteController.deleteLabel);
+NoteRouter.put("/updateLabel", middle.checkToken, noteController.updateLabel);
+NoteRouter.post(
+  "/saveLabelToNote",
+  middle.checkToken,
+  noteController.saveLabelToNote
+);
+NoteRouter.post(
+  "/deleteLabelToNote",
+  middle.checkToken,
+  noteController.deleteLabelToNote
+);
 
 NoteRouter.post(
   "/pushNotification",
   middle.checkToken,
   noteController.pushNotification
 );
-NoteRouter.get("/sendPushNotification/:userid", noteController.sendPushNotification)
+NoteRouter.get(
+  "/sendPushNotification/:userid",
+  noteController.sendPushNotification
+);
 
 // Export API routes
 module.exports = NoteRouter;

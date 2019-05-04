@@ -166,6 +166,40 @@ exports.updateLabel = (labelData, callback) => {
   });
 };
 
+exports.saveLabelToNote = (paramData, callback) => {
+  if (paramData.pull) {
+    noteModel.deleteLabelToNote(paramData, (err, result) => {
+        if (err) {
+            console.log("service error");
+            callback(err);
+        } else {
+            return callback(null, result)
+        }
+    })
+}
+else {
+    noteModel.saveLabelToNote(paramData, (err, result) => {
+        if (err) {
+            console.log("service error");
+            callback(err);
+        } else {
+            return callback(null, result)
+        }
+    })
+}
+}
+
+exports.deleteLabelToNote = (paramData, callback) => {
+  noteModel.deleteLabelToNote(paramData, (err, result) => {
+    if (err) {
+      console.log("service error");
+      callback(err);
+    } else {
+      return callback(null, result);
+    }
+  });
+};
+
 exports.pushNotification = (req, callback) => {
   NotificationModel.updatePushNotification(req, (err, result) => {
     if (err) {
@@ -216,7 +250,7 @@ exports.checkForReminders = () => {
           if (err) {
             console.log("service error");
           } else {
-            console.log("IN SERVICE RESULT IS ",result);
+            console.log("IN SERVICE RESULT IS ", result);
             sendPush.SendPushNotify(result, title, body);
             // return callback(null, result);
           }
