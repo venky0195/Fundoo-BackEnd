@@ -169,25 +169,24 @@ exports.updateLabel = (labelData, callback) => {
 exports.saveLabelToNote = (paramData, callback) => {
   if (paramData.pull) {
     noteModel.deleteLabelToNote(paramData, (err, result) => {
-        if (err) {
-            console.log("service error");
-            callback(err);
-        } else {
-            return callback(null, result)
-        }
-    })
-}
-else {
+      if (err) {
+        console.log("service error");
+        callback(err);
+      } else {
+        return callback(null, result);
+      }
+    });
+  } else {
     noteModel.saveLabelToNote(paramData, (err, result) => {
-        if (err) {
-            console.log("service error");
-            callback(err);
-        } else {
-            return callback(null, result)
-        }
-    })
-}
-}
+      if (err) {
+        console.log("service error");
+        callback(err);
+      } else {
+        return callback(null, result);
+      }
+    });
+  }
+};
 
 exports.deleteLabelToNote = (paramData, callback) => {
   noteModel.deleteLabelToNote(paramData, (err, result) => {

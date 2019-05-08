@@ -1,6 +1,6 @@
 var jwt = require("jsonwebtoken");
 exports.checkToken = (req, res, next) => {
-  console.log("request in authentication", req.body);
+ // console.log("request in authentication", req.body);
 
   var token1 = req.headers["token"];
   
@@ -14,7 +14,7 @@ exports.checkToken = (req, res, next) => {
         });
         console.log("NOT VALID TOKEN");
       } else {
-        console.log("VALID TOKEN");
+        //console.log("VALID TOKEN");
         req.decoded = decoded;
         next();
       }

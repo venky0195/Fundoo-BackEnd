@@ -6,6 +6,7 @@
  *  @since          : 26-03-2019
  *****************************************************************************************/
 const noteService = require("../services/note.services");
+const redisNotes = require("../services/redis.services");
 
 /**
  * @description:it handles the creating note data
@@ -60,21 +61,38 @@ exports.getNotes = (req, res) => {
   try {
     // console.log("note Controller", req);
     var responseResult = {};
-    noteService.getNotes(req, (err, result) => {
-      if (err) {
-        responseResult.status = false;
-        responseResult.message = "Failed to generate note";
-        responseResult.error = err;
-        res.status(500).send(responseResult);
-      } else {
+    const userId = req.decoded.payload.user_id;
+    redisNotes.getNotes(userId, (err, result) => {
+      // If that key exist in Redis store
+      if (result) {
+        const resultJSON = JSON.parse(result);
+        // console.log("RESULT JSON IS ", resultJSON);
         responseResult.status = true;
-        responseResult.message = "List of notes:";
-        responseResult.data = result;
+        responseResult.message = "List of notes from redis cache:";
+        responseResult.data = resultJSON;
         res.status(200).send(responseResult);
+      }
+      // Key does not exist in Redis store
+      // Fetch directly from notesRedis API
+      else {
+        noteService.getNotes(req, (err, result) => {
+          if (result) {
+            redisNotes.addNotestoRedis(result, userId);
+            responseResult.status = true;
+            responseResult.message = "List of notes from database:";
+            responseResult.data = result;
+            res.status(200).send(responseResult);
+          } else {
+            responseResult.status = false;
+            responseResult.message = "Failed to generate note";
+            responseResult.error = err;
+            res.status(500).send(responseResult);
+          }
+        });
       }
     });
   } catch (error) {
-    res.send(err);
+    res.send(error);
   }
 };
 /**
@@ -99,9 +117,11 @@ exports.updateColor = (req, res) => {
       response.error = errors;
       return res.status(422).send(response);
     } else {
-      var responseResult = {};
+      const responseResult = {};
       noteID = req.body.noteID;
       color = req.body.color;
+      const userId = req.decoded.payload.user_id;
+      redisNotes.deleteRedisKey(userId);
       noteService.updateColor(noteID, color, (err, result) => {
         if (err) {
           responseResult.status = false;
@@ -140,6 +160,8 @@ exports.reminder = (req, res) => {
       var responseResult = {};
       noteID = req.body.noteID;
       reminder = req.body.reminder;
+      const userId = req.decoded.payload.user_id;
+      redisNotes.deleteRedisKey(userId);
       noteService.reminder(noteID, reminder, (err, result) => {
         if (err) {
           responseResult.status = false;
@@ -183,6 +205,8 @@ exports.isArchived = (req, res) => {
       var responseResult = {};
       noteID = req.body.noteID;
       archive = req.body.archive;
+      const userId = req.decoded.payload.user_id;
+      redisNotes.deleteRedisKey(userId);
       noteService.isArchived(noteID, archive, (err, result) => {
         if (err) {
           responseResult.status = false;
@@ -226,6 +250,9 @@ exports.isTrashed = (req, res) => {
       var responseResult = {};
       noteID = req.body.noteID;
       trash = req.body.trash;
+      const userId = req.decoded.payload.user_id;
+      redisNotes.deleteRedisKey(userId);
+
       noteService.isTrashed(noteID, trash, (err, result) => {
         if (err) {
           responseResult.status = false;
@@ -262,6 +289,9 @@ exports.deleteNote = (req, res) => {
     } else {
       var responseResult = {};
       // noteID = req.body.noteID;
+      const userId = req.decoded.payload.user_id;
+      redisNotes.deleteRedisKey(userId);
+
       noteService.deleteNote(req, (err, result) => {
         if (err) {
           responseResult.status = false;
@@ -303,6 +333,9 @@ exports.updateTitle = (req, res) => {
       var responseResult = {};
       noteID = req.body.noteID;
       title = req.body.title;
+      const userId = req.decoded.payload.user_id;
+      redisNotes.deleteRedisKey(userId);
+
       noteService.updateTitle(noteID, title, (err, result) => {
         if (err) {
           responseResult.status = false;
@@ -345,6 +378,9 @@ exports.updateDescription = (req, res) => {
       var responseResult = {};
       noteID = req.body.noteID;
       description = req.body.description;
+      const userId = req.decoded.payload.user_id;
+      redisNotes.deleteRedisKey(userId);
+
       noteService.updateDescription(noteID, description, (err, result) => {
         if (err) {
           responseResult.status = false;
@@ -382,6 +418,9 @@ exports.isPinned = (req, res) => {
       var responseResult = {};
       noteID = req.body.noteID;
       pinned = req.body.pinned;
+      const userId = req.decoded.payload.user_id;
+      redisNotes.deleteRedisKey(userId);
+
       noteService.isPinned(noteID, pinned, (err, result) => {
         if (err) {
           responseResult.status = false;
@@ -422,6 +461,9 @@ exports.addLabel = (req, res) => {
         userID: req.decoded.payload.user_id,
         label: req.body.label
       };
+      const userId = req.decoded.payload.user_id;
+      redisNotes.deleteRedisKey(userId);
+
       noteService.addLabel(labelData, (err, result) => {
         if (err) {
           responseResult.status = false;
@@ -488,6 +530,7 @@ exports.deleteLabel = (req, res) => {
     if (errors) {
       response.status = false;
       response.error = errors;
+
       return res.status(422).send(response);
     } else {
       var responseResult = {};
@@ -495,6 +538,8 @@ exports.deleteLabel = (req, res) => {
         labelID: req.body.labelID
       };
       console.log("Label data===>", labelData);
+      const userId = req.decoded.payload.user_id;
+      redisNotes.deleteRedisKey(userId);
 
       noteService.deleteLabel(labelData, (err, result) => {
         if (err) {
@@ -541,6 +586,9 @@ exports.updateLabel = (req, res) => {
         editLabel: req.body.editLabel,
         labelID: req.body.labelID
       };
+      const userId = req.decoded.payload.user_id;
+      redisNotes.deleteRedisKey(userId);
+
       noteService.updateLabel(labelData, (err, result) => {
         if (err) {
           responseResult.status = false;
@@ -577,6 +625,9 @@ exports.saveLabelToNote = (req, res) => {
     } else {
       var responseResult = {};
       //noteID = req.body.noteID;
+      const userId = req.decoded.payload.user_id;
+      redisNotes.deleteRedisKey(userId);
+
       noteService.saveLabelToNote(req.body, (err, result) => {
         if (err) {
           responseResult.status = false;
@@ -613,6 +664,9 @@ exports.deleteLabelToNote = (req, res) => {
     } else {
       var responseResult = {};
       noteID = req.body.noteID;
+      const userId = req.decoded.payload.user_id;
+      redisNotes.deleteRedisKey(userId);
+
       noteService.deleteLabelToNote(req.body, (err, result) => {
         if (err) {
           responseResult.status = false;
