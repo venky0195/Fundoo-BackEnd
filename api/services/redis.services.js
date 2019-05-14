@@ -33,9 +33,9 @@ module.exports = {
     try {
       client.del(query + userId, function(err, response) {
         if (response == 1) {
-          console.log("Redis cache cleared successfully!");
+          console.log("Redis cache cleared successfully!",response);
         } else {
-          console.log("Cannot delete");
+          console.log("Cannot delete",err);
         }
       });
     } catch (err) {

@@ -162,17 +162,18 @@ exports.reminder = (req, res) => {
       reminder = req.body.reminder;
       const userId = req.decoded.payload.user_id;
       redisNotes.deleteRedisKey(userId);
-      noteService.reminder(noteID, reminder, (err, result) => {
-        if (err) {
-          responseResult.status = false;
-          responseResult.error = err;
-          res.status(500).send(responseResult);
-        } else {
+      noteService
+        .reminder(noteID, reminder)
+        .then(result => {
           responseResult.status = true;
           responseResult.data = result;
           res.status(200).send(responseResult);
-        }
-      });
+        })
+        .catch(error => {
+          responseResult.status = false;
+          responseResult.error = error;
+          res.status(500).send(responseResult);
+        });
     }
   } catch (error) {
     res.send(error);

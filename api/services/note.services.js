@@ -44,16 +44,29 @@ exports.updateColor = (paramID, paramData, callback) => {
     }
   });
 };
-exports.reminder = (paramID, paramData, callback) => {
-  noteModel.reminder(paramID, paramData, (err, result) => {
-    if (err) {
-      console.log("service error");
-      callback(err);
-    } else {
-      return callback(null, result);
-    }
-  });
-};
+// exports.reminder = (paramID, paramData, callback) => {
+//   noteModel.reminder(paramID, paramData, (err, result) => {
+//     if (err) {
+//       console.log("service error");
+//       callback(err);
+//     } else {
+//       return callback(null, result);
+//     }
+//   });
+// };
+exports.reminder = (paramID, paramData)=>{
+  return new Promise((resolve, reject)=>{
+    noteModel.reminder(paramID, paramData, (err, result) => {
+           if (err) {
+             console.log("service error");
+            reject(err)
+           } else {
+             resolve(result);
+           }
+         });
+  })
+}
+
 exports.isArchived = (paramID, paramData, callback) => {
   console.log("in services", paramID, paramData);
   noteModel.isArchived(paramID, paramData, (err, result) => {
