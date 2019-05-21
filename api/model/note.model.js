@@ -7,7 +7,7 @@
  ******************************************************************************/
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-var AutoIncrement = require('mongoose-sequence')(mongoose);
+var AutoIncrement = require("mongoose-sequence")(mongoose);
 
 /**
  * @description:Creating note schema using mongoose
@@ -46,15 +46,15 @@ var noteSchema = new Schema(
         ref: "labelSchema"
       }
     ],
-    sequence:{
-      type:Number
+    sequence: {
+      type: Number
     }
   },
   {
     timestamps: true
   }
 );
-noteSchema.plugin(AutoIncrement, {id:'sequence_seq',inc_field: 'sequence'});
+noteSchema.plugin(AutoIncrement, { id: "sequence_seq", inc_field: "sequence" });
 var note = mongoose.model("Note", noteSchema);
 
 function noteModel() {}
@@ -305,7 +305,7 @@ noteModel.prototype.getLabels = (id, callback) => {
     if (err) {
       callback(err);
     } else {
-    //  console.log("labels", result);
+      //  console.log("labels", result);
       return callback(null, result);
     }
   });

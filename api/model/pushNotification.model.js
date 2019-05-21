@@ -46,33 +46,28 @@ NotificationModel.prototype.updatePushNotification = (req, callback) => {
         console.log("error");
         callback(err);
       } else {
-        console.log("success", result)
+        console.log("success", result);
         return callback(null, result);
       }
     }
   );
 };
 
-NotificationModel.prototype.sendPushNotification = (user_id, callback) =>{
+NotificationModel.prototype.sendPushNotification = (user_id, callback) => {
   pushNotification.findOne(
     {
       userId: user_id
     },
-    (err, result)=>{
-      if(err){
+    (err, result) => {
+      if (err) {
         console.log("Error", err);
         callback(err);
-      } else{
+      } else {
         console.log("Success..Push token is --->", result.pushToken);
-        return callback(null, result.pushToken)
+        return callback(null, result.pushToken);
       }
     }
-  )
-}
+  );
+};
 
 module.exports = new NotificationModel();
-
-
-
-
-

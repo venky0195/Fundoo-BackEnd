@@ -29,7 +29,10 @@ var expressValidator = require("express-validator");
 app.use(expressValidator());
 
 // Configuring the database
-const databaseConfig = require("./configuration/database.configuration");
+//const databaseConfig = require("./configuration/database.configuration");
+
+var env = process.env.NODE_ENV || "local";
+var databaseConfig = require("./config/" + env);
 
 require("dotenv").config();
 // Import Mongoose
@@ -40,7 +43,7 @@ mongoose.Promise = global.Promise;
 // useNewUrlParser: true==> Mongoose lets you start using your models immediately,
 // without waiting for mongoose to establish a connection to MongoDB.
 mongoose
-  .connect(databaseConfig.url, {
+  .connect(databaseConfig.config.url, {
     useNewUrlParser: true
   })
   .then(() => {

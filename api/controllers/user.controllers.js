@@ -206,23 +206,23 @@ exports.getAllUsers = (req, res) => {
 
 exports.setProfilePic = (req, res) => {
   try {
-      console.log("req-------------------->",req.decoded);
-      console.log("req-------------------->",req.file.location)
-      var responseResult = {};
-      userID = req.decoded.payload.user_id;
-      let image = (req.file.location)
-      userService.setProfilePic(userID, image, (err, result) => {
-          if (err) {
-              responseResult.success = false;
-              responseResult.error = err;
-              res.status(500).send(responseResult)
-          } else {
-              responseResult.status = true;
-              responseResult.data = result;
-              res.status(200).send(responseResult);
-          }
-      })
+    console.log("req-------------------->", req.decoded);
+    console.log("req-------------------->", req.file.location);
+    var responseResult = {};
+    userID = req.decoded.payload.user_id;
+    let image = req.file.location;
+    userService.setProfilePic(userID, image, (err, result) => {
+      if (err) {
+        responseResult.success = false;
+        responseResult.error = err;
+        res.status(500).send(responseResult);
+      } else {
+        responseResult.status = true;
+        responseResult.data = result;
+        res.status(200).send(responseResult);
+      }
+    });
   } catch (error) {
-      res.send(error);
+    res.send(error);
   }
-}
+};

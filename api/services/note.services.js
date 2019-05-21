@@ -54,18 +54,18 @@ exports.updateColor = (paramID, paramData, callback) => {
 //     }
 //   });
 // };
-exports.reminder = (paramID, paramData)=>{
-  return new Promise((resolve, reject)=>{
+exports.reminder = (paramID, paramData) => {
+  return new Promise((resolve, reject) => {
     noteModel.reminder(paramID, paramData, (err, result) => {
-           if (err) {
-             console.log("service error");
-            reject(err)
-           } else {
-             resolve(result);
-           }
-         });
-  })
-}
+      if (err) {
+        console.log("service error");
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+};
 
 exports.isArchived = (paramID, paramData, callback) => {
   console.log("in services", paramID, paramData);

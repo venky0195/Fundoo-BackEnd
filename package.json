@@ -6,7 +6,8 @@
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter spec",
     "start": "nodemon server.js",
-    "dev": "nodemon server.js",
+    "dev": "export  NODE_ENV=development && node server.js",
+    "prod": "export  NODE_ENV=production && node server.js",
     "build": "node server.js"
   },
   "author": "Venkatesh G",
@@ -21,7 +22,7 @@
   "dependencies": {
     "aws-sdk": "^2.437.0",
     "axios": "^0.18.0",
-    "bcrypt": "^3.0.5",
+    "bcrypt": "^3.0.6",
     "body-parser": "^1.18.3",
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
